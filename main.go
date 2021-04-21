@@ -21,8 +21,10 @@ var (
 
 func main() {
 
+	//mimikatz 抓取hash, 逗号替换空格保存成CSV格式
 	fileName := "passwordHash.txt"
 
+	//打开待匹配文件
 	f, err := os.Open(fileName)
 	defer f.Close()
 	if err != nil {
@@ -35,8 +37,11 @@ func main() {
 			if c == io.EOF {
 				break
 			}
+
+			//CSV文件,用逗号分隔。
 			csvLine := strings.Split(string(strLine), ",")
 			if len(csvLine) == 4 {
+				//取出第3列的密码，调用 CheckHashPwd如果返回值大于0，则为命中
 				var checkPwd = csvLine[2]
 				checkPwd = strings.ToUpper(checkPwd)
 				ChkRes := CheckHashPwd(checkPwd)
